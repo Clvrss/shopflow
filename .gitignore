@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Database (local dev without Docker)
+backend/data/
+*.sqlite
+*.sqlite-journal
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Vite cache
+frontend/.vite/
+
+# Misc
+.tmp/
+.cache/
