@@ -1,0 +1,64 @@
+# ShopFlow full-stack stack with PostgreSQL.
+#
+#   docker compose up --build
+#
+# Services:
+#   postgres  - database (only used when DB_DIALECT=postgres)
+#   api       - Express API, runs migrations + seed on boot
+#   web       - Vite preview of the built frontend (http://localhost:5173)
+#
+# NOTE: the Docker CLI must be available (on Windows this usually lives in WSL).
+# SQLite development does not need Docker at all — see README.md "Quick start".
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shopflow
+      POSTGRES_USER: shopflow
+      POSTGRES_PASSWORD: shopflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopflow -d shopflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DB_DIALECT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: shopflow
+      DB_USER: shopflow
+      DB_PASSWORD: shopflow
+      JWT_SECRET: change-me-in-production
+      CORS_ORIGINS: http://localhost:5173
+      WEB_BASE_URL: http://localhost:5173
+      MAIL_PREVIEW: "true"
+    command: sh -c "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && node src/server.js"
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:4000/api/v1
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
