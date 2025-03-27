@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ShopFlow docs
+    url: https://example.com/404
+    about: Project documentation lives in the /docs directory of this repository.
