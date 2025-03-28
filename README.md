@@ -61,6 +61,12 @@ docs/        architecture, API reference, schema, known issues
 - [Database schema](docs/schema.md)
 - [Known issues](docs/known-issues.md) — deliberate bugs to find and fix
 
+## Docker (PostgreSQL)
+
+An optional `docker-compose.yml` runs Postgres + both services. See
+[docs/architecture.md](docs/architecture.md) and the `docker-compose.yml`
+comments for details.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
