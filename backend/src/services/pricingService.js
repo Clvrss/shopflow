@@ -9,7 +9,7 @@ function shippingFor(subtotalCents, country) {
 }
 
 function taxFor(subtotalCents) {
-  return Math.floor(subtotalCents * TAX_RATE);
+  return Math.ceil(subtotalCents * TAX_RATE);
 }
 
 function discountFor(subtotalCents, coupon) {
