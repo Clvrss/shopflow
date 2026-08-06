@@ -51,8 +51,16 @@ async function login({ email, password }) {
     throw ApiError.forbidden('This account has been disabled');
   }
 
-  user.profile.lastLoginAt = new Date();
-  await user.profile.save();
+  if (!user.profile) {
+    user.profile = await models.Profile.create({
+      userId: user.id,
+      locale: 'en',
+      lastLoginAt: new Date(),
+    });
+  } else {
+    user.profile.lastLoginAt = new Date();
+    await user.profile.save();
+  }
 
   const roleName = user.role ? user.role.name : 'customer';
   const accessToken = tokenUtils.signAccessToken({ id: user.id, roleName });
