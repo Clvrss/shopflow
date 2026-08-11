@@ -18,7 +18,7 @@ const salesReport = asyncHandler(async (req, res) => {
 });
 
 const salesExport = asyncHandler(async (req, res) => {
-  const csv = adminService.exportSalesReport();
+  const csv = await adminService.exportSalesReport(req.query);
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename="sales-report.csv"');
   return res.send(csv);
