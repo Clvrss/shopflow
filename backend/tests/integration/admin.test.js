@@ -59,12 +59,20 @@ describe('/api/v1/admin', () => {
     expect(res.body.data[0].productId).toBe(low.id);
   });
 
-  it('returns 501 for the not-yet-implemented sales export', async () => {
-    const admin = await createUser({ email: 'admin2@example.com', roleId: 1 });
+  it('exports the sales report as CSV', async () => {
+    const admin = await createUser({
+      email: 'admin2@example.com',
+      roleId: 1
+    });
+  
     const adminToken = await loginAs(admin.email);
-
-    const res = await request(app).get('/api/v1/admin/reports/sales/export').set(auth(adminToken));
-    expect(res.status).toBe(501);
+  
+    const res = await request(app)
+      .get('/api/v1/admin/reports/sales/export')
+      .set(auth(adminToken));
+  
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toMatch(/text\/csv/);
   });
 
   it('forbids customers from reading admin users', async () => {
