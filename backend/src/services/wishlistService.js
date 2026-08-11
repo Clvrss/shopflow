@@ -13,7 +13,7 @@ async function addItem(userId, productId) {
   const product = await models.Product.findByPk(productId);
   if (!product) throw ApiError.notFound('Product not found');
 
-  const [item] = await models.WishlistItem.findOrCreate({ where: { userId, productId } });
+  const item = await models.WishlistItem.create({ userId, productId });
   return item;
 }
 
