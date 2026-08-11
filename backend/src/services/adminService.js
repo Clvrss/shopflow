@@ -84,8 +84,16 @@ async function getSalesReport({ from, to }) {
   };
 }
 
-function exportSalesReport() {
-  throw ApiError.notImplemented('CSV export for sales reports is not implemented yet');
+async function exportSalesReport({ from, to } = {}) {
+  const report = await getSalesReport({ from, to });
+
+  let csv = 'Date,RevenueCents\n';
+
+  for (const [day, revenue] of Object.entries(report.totalsByDay)) {
+    csv += `${day},${revenue}\n`;
+  }
+
+  return csv;
 }
 
 module.exports = { getDashboardStats, getSalesReport, exportSalesReport };
